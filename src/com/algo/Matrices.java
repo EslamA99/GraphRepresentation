@@ -32,7 +32,6 @@ public class Matrices {
         adjLists = new LinkedList[vertices.size()];
         for(int i = 0; i < vertices.size(); i++) {
             adjLists[vertices.indexOf(vertices.get(i))] = new LinkedList();
-            System.out.println(vertices.get(i));
         }
     }
     private void generateAdjLists(){
@@ -41,7 +40,8 @@ public class Matrices {
                 adjLists[vertices.indexOf(edges.get(i).from)].add(edges.get(i).to);
             }else {
                 adjLists[vertices.indexOf(edges.get(i).from)].add(edges.get(i).to);
-                adjLists[vertices.indexOf(edges.get(i).to)].add(edges.get(i).from);
+                if(!edges.get(i).from.equals(edges.get(i).to))
+                    adjLists[vertices.indexOf(edges.get(i).to)].add(edges.get(i).from);
             }
 
         }
@@ -73,7 +73,8 @@ public class Matrices {
                 rep[vertices.indexOf(edge.from)][vertices.indexOf(edge.to)] ++;
             else{
                 rep[vertices.indexOf(edge.from)][vertices.indexOf(edge.to)] ++;
-                rep[vertices.indexOf(edge.to)][vertices.indexOf(edge.from)] ++;
+                if(!edge.from.equals(edge.to))
+                    rep[vertices.indexOf(edge.to)][vertices.indexOf(edge.from)] ++;
             }
         }
         //printRep();
@@ -94,8 +95,8 @@ public class Matrices {
         inc = new int[vertices.size()][edges.size()];
         for (int i=0;i<edges.size();i++) {
             Edge edge=edges.get(i);
-            inc[vertices.indexOf(edge.from)][i] = 1;
-            inc[vertices.indexOf(edge.to)][i] = 1;
+            inc[vertices.indexOf(edge.from)][i] ++;
+            inc[vertices.indexOf(edge.to)][i] ++;
         }
         //printInc();
     }
@@ -158,7 +159,6 @@ public class Matrices {
             }
             row.add(connectedTo);
             adjListsTableModel.addRow(row);
-            //System.out.println();
         }
     }
 }
