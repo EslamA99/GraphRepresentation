@@ -13,6 +13,7 @@ public class Matrices {
     private ArrayList<Edge> edges;
     private int[][] adj;
     private int[][] rep;
+    private int[][] inc;
     private Graph<String, String> repGraph = new SparseMultigraph<>();
 
     public Matrices(ArrayList<String> vertices, ArrayList<Edge> edges) {
@@ -20,6 +21,7 @@ public class Matrices {
         this.edges = edges;
         generateAdjMatrix();
         generateRepMatrix();
+        generateIncMatrix();
         setRepGraph();
     }
 
@@ -53,8 +55,6 @@ public class Matrices {
         }
         printRep();
     }
-
-
     private void generateAdjMatrix() {
         adj = new int[vertices.size()][vertices.size()];
         for (Edge edge : edges) {
@@ -66,6 +66,25 @@ public class Matrices {
             }
         }
         //printAdj();
+    }
+    private void generateIncMatrix() {
+        inc = new int[vertices.size()][edges.size()];
+        for (int i=0;i<edges.size();i++) {
+            Edge edge=edges.get(i);
+            inc[vertices.indexOf(edge.from)][i] = 1;
+            inc[vertices.indexOf(edge.to)][i] = 1;
+        }
+        printInc();
+    }
+
+    private void printInc() {
+        System.out.println("Inc");
+        for (int i = 0; i < vertices.size(); i++) {
+            for (int j = 0; j < edges.size(); j++) {
+                System.out.print(inc[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 
     public void setAdjTable(DefaultTableModel adjTableModel) {
