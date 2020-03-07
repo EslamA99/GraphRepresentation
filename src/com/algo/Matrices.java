@@ -42,7 +42,12 @@ public class Matrices {
     private void generateRepMatrix() {
         rep = new int[vertices.size()][vertices.size()];
         for (Edge edge : edges) {
-            rep[vertices.indexOf(edge.from)][vertices.indexOf(edge.to)] += 1;
+            if(edge.isDirected)
+                rep[vertices.indexOf(edge.from)][vertices.indexOf(edge.to)] ++;
+            else{
+                rep[vertices.indexOf(edge.from)][vertices.indexOf(edge.to)] ++;
+                rep[vertices.indexOf(edge.to)][vertices.indexOf(edge.from)] ++;
+            }
         }
         printRep();
     }
@@ -51,7 +56,12 @@ public class Matrices {
     private void generateAdjMatrix() {
         adj = new int[vertices.size()][vertices.size()];
         for (Edge edge : edges) {
-            adj[vertices.indexOf(edge.from)][vertices.indexOf(edge.to)] = 1;
+            if(edge.isDirected)
+                adj[vertices.indexOf(edge.from)][vertices.indexOf(edge.to)] = 1;
+            else{
+                adj[vertices.indexOf(edge.from)][vertices.indexOf(edge.to)] = 1;
+                adj[vertices.indexOf(edge.to)][vertices.indexOf(edge.from)] = 1;
+            }
         }
         printAdj();
     }
