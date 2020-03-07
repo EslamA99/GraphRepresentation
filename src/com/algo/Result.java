@@ -21,9 +21,11 @@ public class Result extends JFrame {
     private JTable adjResultTable;
     private JTable repResultTable;
     private JTable incResultTable;
+    private JTable adjListResultTable;
     private DefaultTableModel adjTableModel;
     private DefaultTableModel repTableModel;
     private DefaultTableModel incTableModel;
+    private DefaultTableModel adjListModel;
     private Matrices matrices;
 
     Result(Matrices matrices){
@@ -31,12 +33,15 @@ public class Result extends JFrame {
         adjTableModel=new DefaultTableModel();
         repTableModel=new DefaultTableModel();
         incTableModel=new DefaultTableModel();
+        adjListModel=new DefaultTableModel();
         adjResultTable.setModel(adjTableModel);
         repResultTable.setModel(repTableModel);
         incResultTable.setModel(incTableModel);
+        adjListResultTable.setModel(adjListModel);
         adjResultTable.setEnabled(false);
         repResultTable.setEnabled(false);
         incResultTable.setEnabled(false);
+        adjListResultTable.setEnabled(false);
         setTitle("ResultForm");
         setSize(800, 600);
         add(panel1);
@@ -51,6 +56,7 @@ public class Result extends JFrame {
         matrices.setAdjTable(adjTableModel);
         matrices.setRepTable(repTableModel);
         matrices.setIncTable(incTableModel);
+        matrices.setAdjListsTable(adjListModel);
     }
 
     private void setGraph() {
