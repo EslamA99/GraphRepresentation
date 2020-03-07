@@ -1,5 +1,6 @@
 package com.algo;
 
+import edu.uci.ics.jung.graph.DelegateForest;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
@@ -7,20 +8,20 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 public class SimpleGraphView {
     // Graph<V, E> where V is the type of the vertices
 // and E is the type of the edges
-    Graph<Integer, String> g = new SparseMultigraph<Integer, String>();
+    Graph<String, String> g = new SparseMultigraph<>();
     Graph<Integer, String> g2 = new SparseMultigraph<Integer, String>();
 
     SimpleGraphView() {
         // Add some vertices. From above we defined these to be type Integer.
-        g.addVertex((Integer) 1);
-        g.addVertex((Integer) 2);
-        g.addVertex((Integer) 3);
-// Add some edges. From above we defined these to be of type String
-// Note that the default is for undirected edges.
-        g.addEdge("Edge-A", 1, 2); // Note that Java 1.5 auto-boxes primitives
-        g.addEdge("Edge-B", 2, 3);
-        g.addEdge("1-1",1,1);
-        g.addEdge("1->1",1,1,EdgeType.DIRECTED);
+        g.addVertex(("aaaaa"));
+        g.addVertex("B");
+        g.addVertex("C");
+        g.addVertex("C");
+        g.addVertex("D");
+        g.addEdge("a-b","aaaaa","B");
+        g.addEdge("a-C","aaaaa","C");
+
+        //g.addEdge("7", 1, 5,EdgeType.DIRECTED);
 // Let's see what we have. Note the nice output from the
 // SparseMultigraph<V,E> toString() method
         System.out.println("The graph g = " + g.toString());
