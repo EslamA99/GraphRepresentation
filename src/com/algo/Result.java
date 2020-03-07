@@ -11,21 +11,34 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import org.apache.commons.collections15.Transformer;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class Result extends JFrame {
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
     private JPanel graphPanel;
+    private JTable adjResultTable;
+    private JTable repResultTable;
+    private DefaultTableModel adjTableModel;
+    private DefaultTableModel repTableModel;
     private Matrices matrices;
+
     Result(Matrices matrices){
+        this.matrices=matrices;
+        adjTableModel=new DefaultTableModel();
+        repTableModel=new DefaultTableModel();
         setTitle("ResultForm");
         setSize(800, 600);
         add(panel1);
-        //this.pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.matrices=matrices;
         setGraph();
+        setMatricesIntoTables();
+
+    }
+
+    private void setMatricesIntoTables() {
+        matrices.setAdjTable(adjTableModel);
     }
 
     private void setGraph() {

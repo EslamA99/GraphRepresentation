@@ -4,7 +4,9 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 
+import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class Matrices {
     private ArrayList<String> vertices;
@@ -63,12 +65,14 @@ public class Matrices {
                 adj[vertices.indexOf(edge.to)][vertices.indexOf(edge.from)] = 1;
             }
         }
-        printAdj();
+        //printAdj();
     }
 
-    private void printAdj() {
-        System.out.println("ADJ");
+    public void setAdjTable(DefaultTableModel adjTableModel) {
+        adjTableModel.addColumn("Vertex Name");
+        for(String v:vertices)adjTableModel.addColumn(v);
         for (int i = 0; i < vertices.size(); i++) {
+            Vector<String>row=new Vector<>();
             for (int j = 0; j < vertices.size(); j++) {
                 System.out.print(adj[i][j] + " ");
             }
