@@ -53,7 +53,7 @@ public class Matrices {
                 rep[vertices.indexOf(edge.to)][vertices.indexOf(edge.from)] ++;
             }
         }
-        printRep();
+        //printRep();
     }
     private void generateAdjMatrix() {
         adj = new int[vertices.size()][vertices.size()];
@@ -74,38 +74,45 @@ public class Matrices {
             inc[vertices.indexOf(edge.from)][i] = 1;
             inc[vertices.indexOf(edge.to)][i] = 1;
         }
-        printInc();
+        //printInc();
     }
 
-    private void printInc() {
-        System.out.println("Inc");
+    public void setIncTable(DefaultTableModel incTableModel) {
+        incTableModel.addColumn("V\\E Name");
+        for(int i=0;i<edges.size();i++)incTableModel.addColumn("E"+i);
         for (int i = 0; i < vertices.size(); i++) {
+            Vector<String>row=new Vector<>();
+            row.add(vertices.get(i));
             for (int j = 0; j < edges.size(); j++) {
-                System.out.print(inc[i][j] + " ");
+                row.add(String.valueOf(inc[i][j]));
             }
-            System.out.println();
+            incTableModel.addRow(row);
         }
     }
 
     public void setAdjTable(DefaultTableModel adjTableModel) {
-        adjTableModel.addColumn("Vertex Name");
+        adjTableModel.addColumn("V\\V Name");
         for(String v:vertices)adjTableModel.addColumn(v);
         for (int i = 0; i < vertices.size(); i++) {
             Vector<String>row=new Vector<>();
+            row.add(vertices.get(i));
             for (int j = 0; j < vertices.size(); j++) {
-                System.out.print(adj[i][j] + " ");
+                row.add(String.valueOf(adj[i][j]));
             }
-            System.out.println();
+            adjTableModel.addRow(row);
         }
     }
 
-    private void printRep() {
-        System.out.println("REP");
+    public void setRepTable(DefaultTableModel repTableModel) {
+        repTableModel.addColumn("V\\V Name");
+        for(String v:vertices)repTableModel.addColumn(v);
         for (int i = 0; i < vertices.size(); i++) {
+            Vector<String>row=new Vector<>();
+            row.add(vertices.get(i));
             for (int j = 0; j < vertices.size(); j++) {
-                System.out.print(rep[i][j] + " ");
+                row.add(String.valueOf(rep[i][j]));
             }
-            System.out.println();
+            repTableModel.addRow(row);
         }
     }
 }

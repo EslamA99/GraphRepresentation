@@ -20,25 +20,37 @@ public class Result extends JFrame {
     private JPanel graphPanel;
     private JTable adjResultTable;
     private JTable repResultTable;
+    private JTable incResultTable;
     private DefaultTableModel adjTableModel;
     private DefaultTableModel repTableModel;
+    private DefaultTableModel incTableModel;
     private Matrices matrices;
 
     Result(Matrices matrices){
         this.matrices=matrices;
         adjTableModel=new DefaultTableModel();
         repTableModel=new DefaultTableModel();
+        incTableModel=new DefaultTableModel();
+        adjResultTable.setModel(adjTableModel);
+        repResultTable.setModel(repTableModel);
+        incResultTable.setModel(incTableModel);
+        adjResultTable.setEnabled(false);
+        repResultTable.setEnabled(false);
+        incResultTable.setEnabled(false);
         setTitle("ResultForm");
         setSize(800, 600);
         add(panel1);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setGraph();
+
         setMatricesIntoTables();
 
     }
 
     private void setMatricesIntoTables() {
         matrices.setAdjTable(adjTableModel);
+        matrices.setRepTable(repTableModel);
+        matrices.setIncTable(incTableModel);
     }
 
     private void setGraph() {
