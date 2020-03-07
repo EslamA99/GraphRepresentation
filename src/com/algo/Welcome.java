@@ -92,8 +92,9 @@ public class Welcome extends JFrame {
                             (Boolean) edgeTableModel.getValueAt(i, 2)
                     ));
                 }
-                Matrices matrices=new Matrices(vertices,edges);
-                try {
+                Matrices matrices;
+                try{
+                    matrices=new Matrices(vertices,edges);
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
@@ -102,17 +103,11 @@ public class Welcome extends JFrame {
                             result.setVisible(true);
                         }
                     });
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedLookAndFeelException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                }catch (Exception E){
+                    JOptionPane.showMessageDialog(new JFrame(), "u may forgot to press enter at last element in vertex or edge table\n" +
+                                    "or edge connect vertex not entered in vertex table", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
-
-
             }
         });
 
