@@ -61,19 +61,14 @@ public class Result extends JFrame {
 
     private void setGraph() {
 
-        Layout<Integer, String> layout3 = new CircleLayout(matrices.getRepGraph());
-        VisualizationViewer<Integer, String> vv3 = new  VisualizationViewer<Integer,String>(layout3);
+        Layout<String, Edge> layout3 = new CircleLayout<>(matrices.getRepGraph());
+        VisualizationViewer<String, Edge> vv3 = new  VisualizationViewer<>(layout3);
 
         //layout3.setSize(new Dimension(770, 570));
         //vv3.setPreferredSize(new Dimension(350, 350));
-        Transformer<String, String> transformer3 = new Transformer<String, String>() {
 
-            @Override
-            public String transform(String arg0){
-                return arg0;
-            }
-        };
-        vv3.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
+        vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
+        vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
         final DefaultModalGraphMouse<String,Number> graphMouse3 = new DefaultModalGraphMouse<>();
         vv3.setGraphMouse(graphMouse3);
         graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);

@@ -22,7 +22,7 @@ public class Welcome extends JFrame {
         edgeTableModel = new DefaultTableModel(new Object[]{}, 0) {
             @Override
             public Class getColumnClass(int columnIndex) {
-                if (columnIndex == 2)
+                if (columnIndex == 3)
                     return Boolean.class;
                 return String.class;
             }
@@ -34,6 +34,7 @@ public class Welcome extends JFrame {
         edgeTable.setModel(edgeTableModel);
         edgeTableModel.addColumn("From");
         edgeTableModel.addColumn("To");
+        edgeTableModel.addColumn("Weight");
         edgeTableModel.addColumn("Directed");
 
 
@@ -65,7 +66,7 @@ public class Welcome extends JFrame {
         ADDButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                edgeTableModel.insertRow(edgeTableModel.getRowCount(), new Object[]{ "", "", false});
+                edgeTableModel.insertRow(edgeTableModel.getRowCount(), new Object[]{ "", "","", false});
             }
         });
         removeButton.addActionListener(new ActionListener() {
@@ -86,10 +87,14 @@ public class Welcome extends JFrame {
                 }
                 ArrayList<Edge> edges = new ArrayList<>();
                 for (int i = 0; i < edgeTable.getRowCount(); i++) {
+                    int weight;
+                    if(edgeTableModel.getValueAt(i,2).toString().isEmpty())weight=0;
+                    else weight=Integer.parseInt(edgeTableModel.getValueAt(i,2).toString());
                     edges.add(new Edge(
                             edgeTableModel.getValueAt(i, 0).toString(),
                             edgeTableModel.getValueAt(i, 1).toString(),
-                            (Boolean) edgeTableModel.getValueAt(i, 2)
+                            (Boolean) edgeTableModel.getValueAt(i, 3),
+                            weight
                     ));
                 }
                 Matrices matrices;

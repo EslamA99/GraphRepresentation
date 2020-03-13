@@ -16,7 +16,7 @@ public class Matrices {
     private int[][] rep;
     private int[][] inc;
     private  LinkedList<String>adjLists[];
-    private Graph<String, String> repGraph = new SparseMultigraph<>();
+    private Graph<String, Edge> repGraph = new SparseMultigraph<>();
 
     public Matrices(ArrayList<String> vertices, ArrayList<Edge> edges) {
         this.vertices = vertices;
@@ -54,15 +54,15 @@ public class Matrices {
             repGraph.addVertex(v);
         for (Edge edge : edges) {
             if (edge.isDirected) {
-                repGraph.addEdge(edge.from + "-" + edge.to + "-" + id, edge.from, edge.to, EdgeType.DIRECTED);
+                repGraph.addEdge(edge, edge.from, edge.to, EdgeType.DIRECTED);
             } else {
-                repGraph.addEdge(edge.from + "-" + edge.to + "-" + id, edge.from, edge.to);
+                repGraph.addEdge(edge, edge.from, edge.to);
             }
             id++;
         }
     }
 
-    public Graph<String, String> getRepGraph() {
+    public Graph<String, Edge> getRepGraph() {
         return repGraph;
     }
 
