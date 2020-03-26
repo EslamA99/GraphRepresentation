@@ -22,6 +22,8 @@ public class Result extends JFrame {
     private JTable repResultTable;
     private JTable incResultTable;
     private JTable adjListResultTable;
+    private JPanel minGraphPannel;
+    private JPanel eulerGraph;
     private DefaultTableModel adjTableModel;
     private DefaultTableModel repTableModel;
     private DefaultTableModel incTableModel;
@@ -46,10 +48,64 @@ public class Result extends JFrame {
         setSize(800, 600);
         add(panel1);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setGraph();
 
         setMatricesIntoTables();
+        setGraph();
+        setMinGraph();
+        setEulerGraph();
+    }
 
+    private void setEulerGraph() {
+        eulerGraph.setLayout(new BorderLayout());
+        if(matrices.getEdges().get(0).isDirected){
+            JLabel label2 = new JLabel("<html><h1>cannot be generate because it's directed graph</h1></html>");
+            eulerGraph.add(label2);
+            return;
+        }
+        EulerUndirected eulerUndirected=new EulerUndirected(matrices.getVertices(),matrices.getEdges());
+
+        Layout<String, Edge> layout3 = new CircleLayout<>(eulerUndirected.getEulerGraph());
+        VisualizationViewer<String, Edge> vv3 = new  VisualizationViewer<>(layout3);
+
+        //layout3.setSize(new Dimension(770, 570));
+        //vv3.setPreferredSize(new Dimension(350, 350));
+
+        vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
+        vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
+        final DefaultModalGraphMouse<String,Number> graphMouse3 = new DefaultModalGraphMouse<>();
+        vv3.setGraphMouse(graphMouse3);
+        graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
+
+        eulerGraph.setLayout(new BorderLayout());
+        eulerGraph.add(vv3,BorderLayout.NORTH);
+    }
+
+    private void setMinGraph() {
+        /***/
+        MinimumSpanningTree minimumSpanningTree=new MinimumSpanningTree(matrices);
+        minGraphPannel.setLayout(new BorderLayout());
+        if(matrices.getEdges().get(0).isDirected){
+            JLabel label2 = new JLabel("<html><h1>cannot be generate because it's directed graph</h1></html>");
+            minGraphPannel.add(label2);
+            return;
+        }
+
+
+
+        Layout<String, Edge> layout3 = new CircleLayout<>(minimumSpanningTree.getMinGraph());
+        VisualizationViewer<String, Edge> vv3 = new  VisualizationViewer<>(layout3);
+
+        //layout3.setSize(new Dimension(770, 570));
+        //vv3.setPreferredSize(new Dimension(350, 350));
+
+        vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
+        vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
+        final DefaultModalGraphMouse<String,Number> graphMouse3 = new DefaultModalGraphMouse<>();
+        vv3.setGraphMouse(graphMouse3);
+        graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
+
+
+        minGraphPannel.add(vv3,BorderLayout.NORTH);
     }
 
     private void setMatricesIntoTables() {
@@ -68,7 +124,7 @@ public class Result extends JFrame {
         //vv3.setPreferredSize(new Dimension(350, 350));
 
         vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
-        vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
+            vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
         final DefaultModalGraphMouse<String,Number> graphMouse3 = new DefaultModalGraphMouse<>();
         vv3.setGraphMouse(graphMouse3);
         graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);

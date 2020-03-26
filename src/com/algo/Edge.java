@@ -1,6 +1,6 @@
 package com.algo;
 
-public class Edge {
+public class Edge implements Comparable<Edge>{
     //String id;
     String from;
     String to;
@@ -13,4 +13,10 @@ public class Edge {
         this.isDirected = isDirected;
         this.weight=weight;
     }
+
+    @Override
+    public int compareTo(Edge edge) {
+        return this.weight - edge.weight;
+    }
+
 }

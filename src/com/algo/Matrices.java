@@ -11,10 +11,24 @@ import java.util.Vector;
 
 public class Matrices {
     private ArrayList<String> vertices;
+
+    public ArrayList<String> getVertices() {
+        return vertices;
+    }
+
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
     private ArrayList<Edge> edges;
+
+
     private int[][] adj;
     private int[][] rep;
     private int[][] inc;
+
+
+
     private  LinkedList<String>adjLists[];
     private Graph<String, Edge> repGraph = new SparseMultigraph<>();
 
@@ -79,17 +93,46 @@ public class Matrices {
         }
         //printRep();
     }
+
+    public int[][] getAdj() {
+        return adj;
+    }
+
+    public int[][] getRep() {
+        return rep;
+    }
+
+    public int[][] getInc() {
+        return inc;
+    }
+
+    public LinkedList<String>[] getAdjLists() {
+        return adjLists;
+    }
+
     private void generateAdjMatrix() {
         adj = new int[vertices.size()][vertices.size()];
         for (Edge edge : edges) {
-            if(edge.isDirected)
+            if(edge.isDirected){
                 adj[vertices.indexOf(edge.from)][vertices.indexOf(edge.to)] = 1;
+            }
+
             else{
                 adj[vertices.indexOf(edge.from)][vertices.indexOf(edge.to)] = 1;
                 adj[vertices.indexOf(edge.to)][vertices.indexOf(edge.from)] = 1;
+
+
             }
         }
-        //printAdj();
+        printAdj();
+    }
+    private void printAdj(){
+        for (int i=0;i<adj.length;i++){
+            for(int j=0;j<adj[0].length;j++){
+                System.out.print(adj[i][j]+"  ");
+            }
+            System.out.println();
+        }
     }
     private void generateIncMatrix() {
         inc = new int[vertices.size()][edges.size()];

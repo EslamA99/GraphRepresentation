@@ -15,18 +15,12 @@ public class Welcome extends JFrame {
     private JButton ADDVetrexButton;
     private JButton REMOVEVertexButton;
     private JTable vertexTable;
+    private JComboBox isDirected;
     private DefaultTableModel edgeTableModel;
     private DefaultTableModel vertexTableModel;
 
     Welcome() {
-        edgeTableModel = new DefaultTableModel(new Object[]{}, 0) {
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                if (columnIndex == 3)
-                    return Boolean.class;
-                return String.class;
-            }
-        };
+        edgeTableModel = new DefaultTableModel();
         vertexTableModel = new DefaultTableModel();
         setTitle("DataForm");
         setSize(800, 600);
@@ -35,9 +29,11 @@ public class Welcome extends JFrame {
         edgeTableModel.addColumn("From");
         edgeTableModel.addColumn("To");
         edgeTableModel.addColumn("Weight");
-        edgeTableModel.addColumn("Directed");
-
-
+        String s1[]={"Un Directed Graph","Directed Graph"};
+        isDirected.addItem("UnDirectedGraph");
+        isDirected.addItem("DirectedGraph");
+        isDirected.setEnabled(true);
+        isDirected.setSelectedItem(0);
         vertexTable.setModel(vertexTableModel);
         vertexTableModel.addColumn("Vertex Name");
 
@@ -66,7 +62,7 @@ public class Welcome extends JFrame {
         ADDButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                edgeTableModel.insertRow(edgeTableModel.getRowCount(), new Object[]{ "", "","", false});
+                edgeTableModel.insertRow(edgeTableModel.getRowCount(), new Object[]{ "", "",""});
             }
         });
         removeButton.addActionListener(new ActionListener() {
@@ -90,12 +86,21 @@ public class Welcome extends JFrame {
                     int weight;
                     if(edgeTableModel.getValueAt(i,2).toString().isEmpty())weight=0;
                     else weight=Integer.parseInt(edgeTableModel.getValueAt(i,2).toString());
-                    edges.add(new Edge(
-                            edgeTableModel.getValueAt(i, 0).toString(),
-                            edgeTableModel.getValueAt(i, 1).toString(),
-                            (Boolean) edgeTableModel.getValueAt(i, 3),
-                            weight
-                    ));
+                    if(isDirected.getSelectedIndex()==0){
+                        edges.add(new Edge(
+                                edgeTableModel.getValueAt(i, 0).toString(),
+                                edgeTableModel.getValueAt(i, 1).toString(),
+                                false,
+                                weight
+                        ));
+                    }else{
+                        edges.add(new Edge(
+                                edgeTableModel.getValueAt(i, 0).toString(),
+                                edgeTableModel.getValueAt(i, 1).toString(),
+                                true,
+                                weight
+                        ));
+                    }
                 }
                 Matrices matrices;
                 try{
