@@ -24,18 +24,30 @@ public class GraphColoring {
         Graph = mat.getAdj();
         V = mat.getVertices();
         x = new int[V.size()];
-        m = getMinimumColors();
+        m = getMinimumColors()+1;
         colors = new ArrayList<>();
         graphColor(0);
-        int count = 0;
-        for (int i = 0; i < m; i++){
-            colors.add(new Color(count,count,count));
-            count+= 20;
-        }
+        colors.add(new Color(255,255,255));
+        colors.add(new Color(0,255,255));
+        colors.add(new Color(255,0,255));
+        colors.add(new Color(255,255,0));
+        colors.add(new Color(125,125,125));
+        colors.add(new Color(0,125,125));
+        colors.add(new Color(125,125,0));
+        colors.add(new Color(0,0,125));
+        colors.add(new Color(0,125,0));
+        colors.add(new Color(125,0,0));
+        colors.add(new Color(255,125,255));
+        colors.add(new Color(0,255,125));
+        colors.add(new Color(125,0,255));
+        colors.add(new Color(255,125,0));
+        colors.add(new Color(125,255,125));
+        colors.add(new Color(255,0,125));
+        colors.add(new Color(0,125,255));
+
         for (int i = 0; i < V.size(); i++){
             result.add(colors.get(x[i]-1));
         }
-        System.out.println(result);
     }
     public int getMinimumColors(){
         int count = 0, max = 0;
