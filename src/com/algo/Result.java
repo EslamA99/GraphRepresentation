@@ -24,6 +24,7 @@ public class Result extends JFrame {
     private JTable adjListResultTable;
     private JPanel minGraphPannel;
     private JPanel eulerGraph;
+    private JPanel graphColoring;
     private DefaultTableModel adjTableModel;
     private DefaultTableModel repTableModel;
     private DefaultTableModel incTableModel;
@@ -53,6 +54,32 @@ public class Result extends JFrame {
         setGraph();
         setMinGraph();
         setEulerGraph();
+        setGraphColoring();
+    }
+
+    private void setGraphColoring() {
+        GraphColoring graphColoring=new GraphColoring(matrices);
+        Layout<String, Edge> layout3 = new CircleLayout<>(matrices.getColoredGraph());
+        VisualizationViewer<String, Edge> vv3 = new  VisualizationViewer<>(layout3);
+        Transformer<String,Paint> vertexPaint1 = new Transformer<>() {
+
+            @Override
+            public Paint transform(String s) {
+                return graphColoring.getResult().get(matrices.getVertices().indexOf(s));
+            }
+        };
+        vv3.getRenderContext().setVertexFillPaintTransformer(vertexPaint1);
+        //layout3.setSize(new Dimension(770, 570));
+        //vv3.setPreferredSize(new Dimension(350, 350));
+
+        vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
+        vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
+        final DefaultModalGraphMouse<String,Number> graphMouse3 = new DefaultModalGraphMouse<>();
+        vv3.setGraphMouse(graphMouse3);
+        graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
+
+        graphPanel.setLayout(new BorderLayout());
+        graphPanel.add(vv3,BorderLayout.NORTH);
     }
 
     private void setEulerGraph() {

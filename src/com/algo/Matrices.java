@@ -32,6 +32,11 @@ public class Matrices {
     private  LinkedList<String>adjLists[];
     private Graph<String, Edge> repGraph = new SparseMultigraph<>();
 
+    public Graph<String, Edge> getColoredGraph() {
+        return coloredGraph;
+    }
+
+    private Graph<String, Edge> coloredGraph = new SparseMultigraph<>();
     public Matrices(ArrayList<String> vertices, ArrayList<Edge> edges) {
         this.vertices = vertices;
         this.edges = edges;
@@ -64,13 +69,18 @@ public class Matrices {
 
     private void setRepGraph() {
         int id = 0;
-        for (String v : vertices)
+        for (String v : vertices){
             repGraph.addVertex(v);
+            coloredGraph.addVertex(v);
+        }
+
         for (Edge edge : edges) {
             if (edge.isDirected) {
                 repGraph.addEdge(edge, edge.from, edge.to, EdgeType.DIRECTED);
+                coloredGraph.addEdge(edge, edge.from, edge.to, EdgeType.DIRECTED);
             } else {
                 repGraph.addEdge(edge, edge.from, edge.to);
+                coloredGraph.addEdge(edge, edge.from, edge.to);
             }
             id++;
         }
