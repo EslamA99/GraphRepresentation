@@ -102,14 +102,15 @@ public class Welcome extends JFrame {
                         ));
                     }
                 }
-                Matrices matrices;
+                Matrices matrices = null;
                 try{
                     matrices=new Matrices(vertices,edges);
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    Matrices finalMatrices = matrices;
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            Result result = new Result(matrices);
+                            Result result = new Result(finalMatrices);
                             result.setVisible(true);
                         }
                     });
@@ -118,6 +119,9 @@ public class Welcome extends JFrame {
                                     "or edge connect vertex not entered in vertex table", "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
+                assert matrices != null;
+                Hamilton ham = new Hamilton(vertices, matrices.getAdj());
+                EulerUndirected euler = new EulerUndirected(vertices, edges);
             }
         });
 
