@@ -10,13 +10,14 @@ public class MinHamilton {
     private int V;
     private ArrayList<String> vertices;
     private int[][] Cost;
-    public ArrayList<Edge> Output = new ArrayList<>();
     private ArrayList<Edge> edges;
-    private Graph<String, Edge> hamiltonMinGraph = new SparseMultigraph<>();
+    private String output="";
 
-    public Graph<String, Edge> getHamiltonMinGraph() {
-        return hamiltonMinGraph;
+    public String getOutput() {
+        return output;
     }
+
+
 
     MinHamilton(ArrayList<String> vertices, int[][] adj, ArrayList<Edge> ed) {
         this.vertices = vertices;
@@ -36,21 +37,9 @@ public class MinHamilton {
             Cost[from][to] = edges.get(i).weight;
         }
         test(graph);
-        setMinHamiltonGraphGraph();
     }
 
-    private void setMinHamiltonGraphGraph() {
-        for (String v : vertices)
-            hamiltonMinGraph.addVertex(v);
-        for (Edge edge : Output) {
-            if (edge.isDirected) {
-                hamiltonMinGraph.addEdge(edge, edge.from, edge.to, EdgeType.DIRECTED);
-            } else {
-                hamiltonMinGraph.addEdge(edge, edge.from, edge.to);
-            }
-        }
 
-    }
 
     public static int getV(String v, ArrayList<String> vertices) {
         for (int i = 0; i < vertices.size(); i++) {
@@ -114,15 +103,9 @@ public class MinHamilton {
             return;
         }
         printSolution(path);
-        SetOutput(path);
     }
 
-    private void SetOutput(int[] path) {
-        for (int i = 0; i < path.length - 1; i++) {
-            Output.add(get(vertices.get(path[i]), vertices.get(path[i++]), edges));
-        }
-        Output.add(get(vertices.get(path[path.length]), vertices.get(path[0]), edges));
-    }
+
 
     private Edge get(String s1, String s2, ArrayList<Edge> edges) {
         for (int i = 0; i < edges.size(); i++) {
@@ -133,9 +116,13 @@ public class MinHamilton {
     }
 
     private void printSolution(int[] path) {
-        System.out.println("Minimum Hamiltonian Cycle:");
-        for (int i = 0; i < V; i++)
-            System.out.print(" " + vertices.get(path[i]) + " ");
-        System.out.println(" " + vertices.get(path[0]) + " ");
+        System.out.println("Hamiltonian Cycle::");
+        //a b c d f
+        for (int i = 0; i < V; i++){
+            output+=vertices.get(path[i]) + " -> ";
+        }
+
+        output+=vertices.get(path[0]);
+
     }
 }
