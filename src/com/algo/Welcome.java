@@ -119,9 +119,9 @@ public class Welcome extends JFrame {
                                     "or edge connect vertex not entered in vertex table", "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
-                assert matrices != null;
+                /*assert matrices != null;
                 Hamilton ham = new Hamilton(vertices, matrices.getAdj());
-                EulerUndirected euler = new EulerUndirected(vertices, edges);
+                EulerUndirected euler = new EulerUndirected(vertices, edges);*/
             }
         });
 

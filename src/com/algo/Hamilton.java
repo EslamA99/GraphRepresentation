@@ -1,14 +1,25 @@
 package com.algo;
 
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+
 import java.util.ArrayList;
 
 class Hamilton {
     private int V;
     private ArrayList<String> vertices;
-    public ArrayList<Edge> Output=new ArrayList<Edge>();
+    //private ArrayList<Edge> Output=new ArrayList<>();
     private ArrayList<Edge> edges;
+    //private Graph<String, Edge> hamiltonGraph = new SparseMultigraph<>();
+    private String Output="";
 
-    Hamilton(ArrayList<String> vertices, int[][] adj,ArrayList<Edge> ed) {
+    public String getOutput() {
+        return Output;
+    }
+
+
+    Hamilton(ArrayList<String> vertices, int[][] adj, ArrayList<Edge> ed) {
         this.vertices = vertices;
         V = vertices.size();
         int[][] graph;
@@ -16,6 +27,8 @@ class Hamilton {
         edges=ed;
         test(graph);
     }
+
+
 
     private void test(int[][] graph) {
         hamCycle(graph);
@@ -58,15 +71,8 @@ class Hamilton {
             return;
         }
         printSolution(path);
-        SetOutput(path);
     }
-    private void SetOutput(int[] path){
-        for (int i=0;i<path.length-1;i++)
-        {
-            Output.add(get(vertices.get(path[i]),vertices.get(path[i++]),edges));
-        }
-        Output.add(get(vertices.get(path[path.length]),vertices.get(path[0]),edges));
-    }
+
     private Edge get(String s1,String s2,ArrayList<Edge>edges)
     {
         for (int i=0;i<edges.size();i++) {
@@ -78,13 +84,16 @@ class Hamilton {
 
     private void printSolution(int[] path) {
         System.out.println("Hamiltonian Cycle::");
-        for (int i = 0; i < V; i++)
-            System.out.print(" " + vertices.get(path[i]) + " ");
-        System.out.println(" " + vertices.get(path[0]) + " ");
+        //a b c d f
+        for (int i = 0; i < V; i++){
+            Output+=vertices.get(path[i]) + " -> ";
+        }
 
-        System.out.println("Hamiltonian Path::");
+        Output+=vertices.get(path[0]);
+
+        /*System.out.println("Hamiltonian Path::");
         for (int i = 0; i < V; i++)
             System.out.print(" " + vertices.get(path[i]) + " ");
-        System.out.println();
+        System.out.println();*/
     }
 }

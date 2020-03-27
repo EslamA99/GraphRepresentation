@@ -15,18 +15,13 @@ public class EulerUndirected {
     private ArrayList<String> vertices;
     private ArrayList<Edge> edges;
     private HashMap<String, Integer> VtoI;
-
-    public int getCurrEulerPath() {
-        return currEulerPath;
-    }
-
-    private int currEulerPath;
-    public ArrayList<Edge> getEulerEdges() {
-        return eulerEdges;
-    }
-
     private ArrayList<Edge> eulerEdges;
     private Graph<String, Edge> eulerGraph = new SparseMultigraph<>();
+    private int currPath;
+
+    public int getCurrPath() {
+        return currPath;
+    }
 
     public EulerUndirected(ArrayList<String> vertices, ArrayList<Edge> edges) {
         this.vertices = vertices;
@@ -129,13 +124,17 @@ public class EulerUndirected {
 
     void test() {
         int res = isEulerian();
-        if (res == 0)
-            currEulerPath=0;
+        if (res == 0){
+            currPath=0;
+        }
+            //System.out.println("graph is not Eulerian");
         else if (res == 1) {
-           currEulerPath=1;
+            currPath=1;
+            //System.out.println("graph has an Euler path");
             printEulerTour();
         } else {
-            currEulerPath=2;
+            currPath=2;
+            //System.out.println("graph has an Euler cycle");
             printEulerTour();
         }
     }
