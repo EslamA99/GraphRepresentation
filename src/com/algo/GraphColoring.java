@@ -1,5 +1,10 @@
 package com.algo;
 
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 public class GraphColoring {
@@ -7,13 +12,29 @@ public class GraphColoring {
     private int m ;
     private int[] x;
     private int[][]Graph;
+    private ArrayList<Color> colors;
+    private ArrayList<Color> result = new ArrayList<>();
+
+    public ArrayList<Color> getResult() {
+        return result;
+    }
 
     public GraphColoring(Matrices mat){
         Graph = mat.getAdj();
         V = mat.getVertices();
-        x=new int[V.size()];
-        m=getMinimumColors();
-
+        x = new int[V.size()];
+        m = getMinimumColors();
+        colors = new ArrayList<>();
+        graphColor(0);
+        int count = 0;
+        for (int i = 0; i < m; i++){
+            colors.add(new Color(count,count,count));
+            count+= 20;
+        }
+        for (int i = 0; i < V.size(); i++){
+            result.add(colors.get(x[i]-1));
+        }
+        System.out.println(result);
     }
     public int getMinimumColors(){
         int count = 0, max = 0;
