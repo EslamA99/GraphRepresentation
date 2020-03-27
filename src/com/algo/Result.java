@@ -78,8 +78,8 @@ public class Result extends JFrame {
         vv3.setGraphMouse(graphMouse3);
         graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
 
-        graphPanel.setLayout(new BorderLayout());
-        graphPanel.add(vv3,BorderLayout.NORTH);
+        this.graphColoring.setLayout(new BorderLayout());
+        this.graphColoring.add(vv3,BorderLayout.NORTH);
     }
 
     private void setEulerGraph() {
