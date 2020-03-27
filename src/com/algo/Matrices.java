@@ -214,8 +214,4 @@ public class Matrices {
             adjListsTableModel.addRow(row);
         }
     }
-    int[][] getAdj()
-    {
-        return adj;
-    }
 }

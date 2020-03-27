@@ -55,13 +55,14 @@ public class Result extends JFrame {
         setMinGraph();
         setEulerGraph();
         setGraphColoring();
+        MinHamilton m = new MinHamilton(matrices.getVertices(),matrices.getAdj(),matrices.getEdges());
     }
 
     private void setGraphColoring() {
         GraphColoring graphColoring=new GraphColoring(matrices);
         Layout<String, Edge> layout3 = new CircleLayout<>(matrices.getColoredGraph());
         VisualizationViewer<String, Edge> vv3 = new  VisualizationViewer<>(layout3);
-        Transformer<String,Paint> vertexPaint1 = new Transformer<>() {
+        Transformer<String,Paint> vertexPaint1 = new Transformer<String,Paint>() {
 
             @Override
             public Paint transform(String s) {

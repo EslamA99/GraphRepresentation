@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="Jung2Liberary/collections-generic-4.01.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/colt-1.2.0.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/concurrent-1.3.4.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/j3d-core-1.3.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/jung-3d-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/jung-3d-demos-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/jung-algorithms-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/jung-api-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/jung-graph-impl-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/jung-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/jung-jai-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/jung-jai-samples-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/jung-samples-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/jung-visualization-2.0.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/vecmath-1.3.1.jar"/>
+	<classpathentry kind="lib" path="Jung2Liberary/wstx-asl-3.2.6.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
