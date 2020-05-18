@@ -3,11 +3,8 @@ package com.algo;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
-import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
-import edu.uci.ics.jung.visualization.control.ScalingControl;
-import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import org.apache.commons.collections15.Transformer;
 
 import javax.swing.*;
@@ -28,6 +25,13 @@ public class Result extends JFrame {
     private JLabel msg;
     private JPanel hamiltonGraph;
     private JPanel minHamiltonGraph;
+    private JPanel Dijkstra;
+    private JPanel MaxFlowTab;
+    private JPanel maxFlow;
+    private JLabel maxFlowValue;
+    private JLabel allPathesMaxFlow;
+    private JTextField allPaths;
+    private JTextField totalFlow;
     private DefaultTableModel adjTableModel;
     private DefaultTableModel repTableModel;
     private DefaultTableModel incTableModel;
@@ -55,11 +59,34 @@ public class Result extends JFrame {
 
         setMatricesIntoTables();
         setGraph();
+        setDijGraph();
+        setMaxFlowGraph();
         setMinGraph();
         setEulerGraph();
         setGraphColoring();
         setHamiltonGraph();
         setMinHamiltonGraph();
+
+    }
+
+    private void setMaxFlowGraph() {
+
+        MaxFlow maxFlowObj = new MaxFlow(matrices);
+        this.maxFlow.setLayout(new BorderLayout());
+
+        Layout<String, Edge> layout3 = new CircleLayout<>(maxFlowObj.getMinGraph());
+        VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
+        allPathesMaxFlow.setText("All Paths: "+maxFlowObj.allPaths);
+        maxFlowValue.setText("Total Flow:  "+maxFlowObj.totalFlow);
+        //layout3.setSize(new Dimension(770, 570));
+        //vv3.setPreferredSize(new Dimension(350, 350));
+
+        vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
+        vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.flow));
+        final DefaultModalGraphMouse<String, Number> graphMouse3 = new DefaultModalGraphMouse<>();
+        vv3.setGraphMouse(graphMouse3);
+        graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
+        this.maxFlow.add(vv3, BorderLayout.NORTH);
 
     }
 
@@ -171,6 +198,32 @@ public class Result extends JFrame {
 
 
         minGraphPannel.add(vv3, BorderLayout.NORTH);
+    }
+
+    private void setDijGraph() {
+        /***/
+        Dijkstra dijkstraObj = new Dijkstra(matrices);
+        this.Dijkstra.setLayout(new BorderLayout());
+
+        /*if (matrices.getEdges().get(0).isDirected) {
+            JLabel label2 = new JLabel("<html><h1>cannot be generate because it's directed graph</h1></html>");
+            minGraphPannel.add(label2);
+            return;
+        }*/
+
+
+        Layout<String, Edge> layout3 = new CircleLayout<>(dijkstraObj.getMinGraph());
+        VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
+
+        //layout3.setSize(new Dimension(770, 570));
+        //vv3.setPreferredSize(new Dimension(350, 350));
+
+        vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
+        vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
+        final DefaultModalGraphMouse<String, Number> graphMouse3 = new DefaultModalGraphMouse<>();
+        vv3.setGraphMouse(graphMouse3);
+        graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
+        this.Dijkstra.add(vv3, BorderLayout.NORTH);
     }
 
     private void setMatricesIntoTables() {

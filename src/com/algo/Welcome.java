@@ -79,34 +79,81 @@ public class Welcome extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 ArrayList<String> vertices = new ArrayList<>();
                 for (int i = 0; i < vertexTable.getRowCount(); i++) {
-                    vertices.add(vertexTableModel.getValueAt(i, 0).toString());
+                    String vert=vertexTableModel.getValueAt(i, 0).toString().trim();
+                    if(vertices.contains(vert)){
+                        JOptionPane.showMessageDialog(new JFrame(), "u put vertex '"+vert+"' more than one time", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    if(vert.isEmpty()){
+                        JOptionPane.showMessageDialog(new JFrame(), "u may forget to press enter or put empty vertex at index "+i+" in vertices table", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    vertices.add(vert);
+
                 }
                 ArrayList<Edge> edges = new ArrayList<>();
                 for (int i = 0; i < edgeTable.getRowCount(); i++) {
                     int weight;
-                    if(edgeTableModel.getValueAt(i,2).toString().isEmpty())weight=0;
-                    else weight=Integer.parseInt(edgeTableModel.getValueAt(i,2).toString());
+                    if(edgeTableModel.getValueAt(i,2).toString().trim().isEmpty())weight=0;
+                    else{
+                        try{
+                            weight=Integer.parseInt(edgeTableModel.getValueAt(i,2).toString());
+                        }catch (Exception e){
+                            JOptionPane.showMessageDialog(new JFrame(), "weight mus be int value at index "+i+" in edges table", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+
+                    }
+                    if( edgeTableModel.getValueAt(i, 0).toString().trim().isEmpty()||edgeTableModel.getValueAt(i, 1).toString().trim().isEmpty()){
+                        JOptionPane.showMessageDialog(new JFrame(), "edges shouldn't be empty at index "+i+" in edges table", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    if( !vertices.contains(edgeTableModel.getValueAt(i, 0).toString().trim())||!vertices.contains(edgeTableModel.getValueAt(i, 1).toString().trim())){
+                        JOptionPane.showMessageDialog(new JFrame(), "one or two vertices not found in vertices table at index "+i+" in edges table", "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                     if(isDirected.getSelectedIndex()==0){
                         edges.add(new Edge(
-                                edgeTableModel.getValueAt(i, 0).toString(),
-                                edgeTableModel.getValueAt(i, 1).toString(),
+                                edgeTableModel.getValueAt(i, 0).toString().trim(),
+                                edgeTableModel.getValueAt(i, 1).toString().trim(),
                                 false,
                                 weight
                         ));
                     }else{
                         edges.add(new Edge(
-                                edgeTableModel.getValueAt(i, 0).toString(),
-                                edgeTableModel.getValueAt(i, 1).toString(),
+                                edgeTableModel.getValueAt(i, 0).toString().trim(),
+                                edgeTableModel.getValueAt(i, 1).toString().trim(),
                                 true,
                                 weight
                         ));
                     }
                 }
+                if(edges.isEmpty()){
+                    JOptionPane.showMessageDialog(new JFrame(), "edges shouldn't be empty", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 Matrices matrices = null;
-                try{
+
                     matrices=new Matrices(vertices,edges);
+                try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    Matrices finalMatrices = matrices;
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e) {
+                    e.printStackTrace();
+                }
+                Matrices finalMatrices = matrices;
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
@@ -114,11 +161,7 @@ public class Welcome extends JFrame {
                             result.setVisible(true);
                         }
                     });
-                }catch (Exception E){
-                    JOptionPane.showMessageDialog(new JFrame(), "u may forgot to press enter at last element in vertex or edge table\n" +
-                                    "or edge connect vertex not entered in vertex table", "Error",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+
                 /*assert matrices != null;
                 Hamilton ham = new Hamilton(vertices, matrices.getAdj());
                 EulerUndirected euler = new EulerUndirected(vertices, edges);*/
