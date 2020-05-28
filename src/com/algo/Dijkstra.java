@@ -71,7 +71,6 @@ public class Dijkstra {
             int u = minDistance(dist, sptSet);
             boolean changedBefore=false;
             sptSet[u] = true;
-
             for (int v = 0; v < vertices.size(); v++)
                 if (!sptSet[v] && graph[u][v] != 0 && dist[u] != Integer.MAX_VALUE && dist[u] + graph[u][v] < dist[v]){
                     if(dist[v]<2000000)
@@ -79,10 +78,8 @@ public class Dijkstra {
                     dist[v] = dist[u] + graph[u][v];
                     if(changedBefore){
                         minGraph.removeEdge(getIndex(v));
-                        minGraph.removeVertex(vertices.get(v));
-
+                        minGraph.removeVertex(getvertix(vertices.get(v)));
                     }
-
                     Edge e=new Edge(vertices.get(u),vertices.get(v),directed,graph[u][v]);
                     if(directed)
                         minGraph.addEdge(e,vertices.get(u)+" / cost : "+dist[u],vertices.get(v)+" / cost : "+dist[v], EdgeType.DIRECTED);
@@ -93,6 +90,13 @@ public class Dijkstra {
         }
 
 
+    }
+
+    private String getvertix(String s) {
+        for(String v : minGraph.getVertices()){
+            if(v.charAt(0)==s.charAt(0))return v;
+        }
+        return "";
     }
 
     private Edge getIndex(int v) {
