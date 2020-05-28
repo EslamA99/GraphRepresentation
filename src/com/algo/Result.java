@@ -232,7 +232,6 @@ public class Result extends JFrame {
                 Dijkstra.removeAll();
                 revalidate();
                 repaint();
-                Dijkstra.setLayout(new BorderLayout());
                 tempGraph.addVertex(V[count]);
                 tempGraph.addEdge(E[count - 1], V[count - 1], V[count]);
                 count++;
