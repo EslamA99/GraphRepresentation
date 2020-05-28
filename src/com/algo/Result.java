@@ -2,6 +2,8 @@ package com.algo;
 
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -10,6 +12,8 @@ import org.apache.commons.collections15.Transformer;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Result extends JFrame {
     private JTabbedPane tabbedPane1;
@@ -25,11 +29,14 @@ public class Result extends JFrame {
     private JLabel msg;
     private JPanel hamiltonGraph;
     private JPanel minHamiltonGraph;
+    private JPanel DijkstraTab;
     private JPanel Dijkstra;
     private JPanel MaxFlowTab;
     private JPanel maxFlow;
     private JLabel maxFlowValue;
     private JLabel allPathesMaxFlow;
+    private JButton nextEdgeInMaxFlow;
+    private JButton nextEdgeInDij;
     private JTextField allPaths;
     private JTextField totalFlow;
     private DefaultTableModel adjTableModel;
@@ -37,7 +44,7 @@ public class Result extends JFrame {
     private DefaultTableModel incTableModel;
     private DefaultTableModel adjListModel;
     private Matrices matrices;
-
+    int count=1;
     Result(Matrices matrices) {
         this.matrices = matrices;
         adjTableModel = new DefaultTableModel();
@@ -66,6 +73,7 @@ public class Result extends JFrame {
         setGraphColoring();
         setHamiltonGraph();
         setMinHamiltonGraph();
+
 
     }
 
@@ -201,29 +209,47 @@ public class Result extends JFrame {
     }
 
     private void setDijGraph() {
-        /***/
         Dijkstra dijkstraObj = new Dijkstra(matrices);
-        this.Dijkstra.setLayout(new BorderLayout());
-
-        /*if (matrices.getEdges().get(0).isDirected) {
-            JLabel label2 = new JLabel("<html><h1>cannot be generate because it's directed graph</h1></html>");
-            minGraphPannel.add(label2);
-            return;
-        }*/
-
-
-        Layout<String, Edge> layout3 = new CircleLayout<>(dijkstraObj.getMinGraph());
+        Dijkstra.setLayout(new BorderLayout());
+        int verticesCount=dijkstraObj.getMinGraph().getVertexCount();
+        String[] V = new String[dijkstraObj.getMinGraph().getVertexCount()];
+        Edge[] E = new Edge[dijkstraObj.getMinGraph().getEdgeCount()];
+        dijkstraObj.getMinGraph().getVertices().toArray(V);
+        dijkstraObj.getMinGraph().getEdges().toArray(E);
+        Graph<String, Edge> tempGraph = new SparseMultigraph<>();
+        tempGraph.addVertex(V[0]);
+        Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
         VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
-
-        //layout3.setSize(new Dimension(770, 570));
-        //vv3.setPreferredSize(new Dimension(350, 350));
-
         vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
         vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
         final DefaultModalGraphMouse<String, Number> graphMouse3 = new DefaultModalGraphMouse<>();
         vv3.setGraphMouse(graphMouse3);
         graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
-        this.Dijkstra.add(vv3, BorderLayout.NORTH);
+        Dijkstra.add(vv3, BorderLayout.NORTH);
+        nextEdgeInDij.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Dijkstra.removeAll();
+                revalidate();
+                repaint();
+                Dijkstra.setLayout(new BorderLayout());
+                tempGraph.addVertex(V[count]);
+                tempGraph.addEdge(E[count - 1], V[count - 1], V[count]);
+                count++;
+                Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
+                VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
+                vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
+                vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
+                final DefaultModalGraphMouse<String, Number> graphMouse3 = new DefaultModalGraphMouse<>();
+                vv3.setGraphMouse(graphMouse3);
+                graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
+                Dijkstra.add(vv3, BorderLayout.NORTH);
+                if(count==V.length)
+                    nextEdgeInDij.setEnabled(false);
+            }
+        });
+
+
     }
 
     private void setMatricesIntoTables() {
