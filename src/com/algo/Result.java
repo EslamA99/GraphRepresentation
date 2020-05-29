@@ -4,6 +4,7 @@ import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
@@ -44,7 +45,8 @@ public class Result extends JFrame {
     private DefaultTableModel incTableModel;
     private DefaultTableModel adjListModel;
     private Matrices matrices;
-    int count=1;
+    int dijCount =1;
+    int maxFlowCount=1;
     Result(Matrices matrices) {
         this.matrices = matrices;
         adjTableModel = new DefaultTableModel();
@@ -79,22 +81,106 @@ public class Result extends JFrame {
 
     private void setMaxFlowGraph() {
 
-        MaxFlow maxFlowObj = new MaxFlow(matrices);
+
+
         this.maxFlow.setLayout(new BorderLayout());
 
-        Layout<String, Edge> layout3 = new CircleLayout<>(maxFlowObj.getMinGraph());
-        VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
+        if (!matrices.getEdges().get(0).isDirected) {
+            JLabel label2 = new JLabel("<html><h1>cannot be generate because it's undirected graph</h1></html>");
+            this.maxFlow.add(label2);
+            return;
+        }
+        MaxFlow maxFlowObj = new MaxFlow(matrices);
         allPathesMaxFlow.setText("All Paths: "+maxFlowObj.allPaths);
         maxFlowValue.setText("Total Flow:  "+maxFlowObj.totalFlow);
-        //layout3.setSize(new Dimension(770, 570));
-        //vv3.setPreferredSize(new Dimension(350, 350));
-
+        String[] V = new String[maxFlowObj.getMinGraph().getVertexCount()];
+        Edge[] E = new Edge[maxFlowObj.getMinGraph().getEdgeCount()];
+        maxFlowObj.getMinGraph().getVertices().toArray(V);
+        maxFlowObj.getMinGraph().getEdges().toArray(E);
+        Graph<String, Edge> tempGraph = new SparseMultigraph<>();
+        tempGraph.addVertex(V[0]);
+        Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
+        VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
         vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
         vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.flow));
         final DefaultModalGraphMouse<String, Number> graphMouse3 = new DefaultModalGraphMouse<>();
         vv3.setGraphMouse(graphMouse3);
         graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
-        this.maxFlow.add(vv3, BorderLayout.NORTH);
+        maxFlow.add(vv3, BorderLayout.NORTH);
+        nextEdgeInMaxFlow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                maxFlow.removeAll();
+                revalidate();
+                repaint();
+                if(maxFlowCount <V.length) {
+                    tempGraph.addVertex(V[maxFlowCount]);
+                    tempGraph.addEdge(E[maxFlowCount - 1], E[maxFlowCount - 1].from, E[maxFlowCount - 1].to, EdgeType.DIRECTED);
+
+                    maxFlowCount++;
+                     }
+                 else
+                {
+                    tempGraph.addEdge(E[maxFlowCount - 1], E[maxFlowCount - 1].from, E[maxFlowCount - 1].to, EdgeType.DIRECTED);
+                    nextEdgeInMaxFlow.setEnabled(false);
+                }
+                Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
+                VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
+                vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
+                vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.flow));
+                final DefaultModalGraphMouse<String, Number> graphMouse3 = new DefaultModalGraphMouse<>();
+                vv3.setGraphMouse(graphMouse3);
+                graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
+                maxFlow.add(vv3, BorderLayout.NORTH);
+
+            }
+        });
+
+
+
+
+    }
+
+    private void setDijGraph() {
+        Dijkstra dijkstraObj = new Dijkstra(matrices);
+        this.Dijkstra.setLayout(new BorderLayout());
+        String[] V = new String[dijkstraObj.getMinGraph().getVertexCount()];
+        Edge[] E = new Edge[dijkstraObj.getMinGraph().getEdgeCount()];
+        dijkstraObj.getMinGraph().getVertices().toArray(V);
+        dijkstraObj.getMinGraph().getEdges().toArray(E);
+        Graph<String, Edge> tempGraph = new SparseMultigraph<>();
+        tempGraph.addVertex(V[0]);
+        Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
+        VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
+        vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
+        vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
+        final DefaultModalGraphMouse<String, Number> graphMouse3 = new DefaultModalGraphMouse<>();
+        vv3.setGraphMouse(graphMouse3);
+        graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
+        Dijkstra.add(vv3, BorderLayout.NORTH);
+        nextEdgeInDij.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Dijkstra.removeAll();
+                revalidate();
+                repaint();
+                tempGraph.addVertex(V[dijCount]);
+                if (matrices.getEdges().get(0).isDirected) tempGraph.addEdge(E[dijCount - 1], E[dijCount - 1].from, E[dijCount - 1].to,EdgeType.DIRECTED);
+                else tempGraph.addEdge(E[dijCount - 1], E[dijCount - 1].from, E[dijCount - 1].to);
+                dijCount++;
+                Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
+                VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
+                vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
+                vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
+                final DefaultModalGraphMouse<String, Number> graphMouse3 = new DefaultModalGraphMouse<>();
+                vv3.setGraphMouse(graphMouse3);
+                graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
+                Dijkstra.add(vv3, BorderLayout.NORTH);
+                if(dijCount ==V.length)
+                    nextEdgeInDij.setEnabled(false);
+            }
+        });
+
 
     }
 
@@ -208,48 +294,7 @@ public class Result extends JFrame {
         minGraphPannel.add(vv3, BorderLayout.NORTH);
     }
 
-    private void setDijGraph() {
-        Dijkstra dijkstraObj = new Dijkstra(matrices);
-        Dijkstra.setLayout(new BorderLayout());
-        int verticesCount=dijkstraObj.getMinGraph().getVertexCount();
-        String[] V = new String[dijkstraObj.getMinGraph().getVertexCount()];
-        Edge[] E = new Edge[dijkstraObj.getMinGraph().getEdgeCount()];
-        dijkstraObj.getMinGraph().getVertices().toArray(V);
-        dijkstraObj.getMinGraph().getEdges().toArray(E);
-        Graph<String, Edge> tempGraph = new SparseMultigraph<>();
-        tempGraph.addVertex(V[0]);
-        Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
-        VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
-        vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
-        vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
-        final DefaultModalGraphMouse<String, Number> graphMouse3 = new DefaultModalGraphMouse<>();
-        vv3.setGraphMouse(graphMouse3);
-        graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
-        Dijkstra.add(vv3, BorderLayout.NORTH);
-        nextEdgeInDij.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Dijkstra.removeAll();
-                revalidate();
-                repaint();
-                tempGraph.addVertex(V[count]);
-                tempGraph.addEdge(E[count - 1], V[count - 1], V[count]);
-                count++;
-                Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
-                VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
-                vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
-                vv3.getRenderContext().setEdgeLabelTransformer(s -> String.valueOf(s.weight));
-                final DefaultModalGraphMouse<String, Number> graphMouse3 = new DefaultModalGraphMouse<>();
-                vv3.setGraphMouse(graphMouse3);
-                graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
-                Dijkstra.add(vv3, BorderLayout.NORTH);
-                if(count==V.length)
-                    nextEdgeInDij.setEnabled(false);
-            }
-        });
 
-
-    }
 
     private void setMatricesIntoTables() {
         matrices.setAdjTable(adjTableModel);

@@ -80,9 +80,10 @@ public class Dijkstra {
                         minGraph.removeEdge(getIndex(v));
                         minGraph.removeVertex(getvertix(vertices.get(v)));
                     }
-                    Edge e=new Edge(vertices.get(u),vertices.get(v),directed,graph[u][v]);
+                    Edge e=new Edge(vertices.get(u)+" / cost : "+dist[u],vertices.get(v)+" / cost : "+dist[v],directed,graph[u][v]);
                     if(directed)
                         minGraph.addEdge(e,vertices.get(u)+" / cost : "+dist[u],vertices.get(v)+" / cost : "+dist[v], EdgeType.DIRECTED);
+
                     else
                         minGraph.addEdge(e,vertices.get(u)+" / cost : "+dist[u],vertices.get(v)+" / cost : "+dist[v]);
                     minGraph.addVertex(vertices.get(v)+" / cost : "+dist[v]);
