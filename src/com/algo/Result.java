@@ -15,6 +15,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Result extends JFrame {
     private JTabbedPane tabbedPane1;
@@ -145,9 +147,12 @@ public class Result extends JFrame {
         Dijkstra dijkstraObj = new Dijkstra(matrices);
         this.Dijkstra.setLayout(new BorderLayout());
         String[] V = new String[dijkstraObj.getMinGraph().getVertexCount()];
-        Edge[] E = new Edge[dijkstraObj.getMinGraph().getEdgeCount()];
+        //Edge[] E = new Edge[dijkstraObj.getMinGraph().getEdgeCount()];
         dijkstraObj.getMinGraph().getVertices().toArray(V);
-        dijkstraObj.getMinGraph().getEdges().toArray(E);
+        //dijkstraObj.getMinGraph().getEdges().toArray(E);
+        //Collections.sort(E);
+        ArrayList<Edge> E = new ArrayList<>(dijkstraObj.getMinGraph().getEdges());
+        Collections.sort(E);
         Graph<String, Edge> tempGraph = new SparseMultigraph<>();
         tempGraph.addVertex(V[0]);
         Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
@@ -164,9 +169,10 @@ public class Result extends JFrame {
                 Dijkstra.removeAll();
                 revalidate();
                 repaint();
-                tempGraph.addVertex(V[dijCount]);
-                if (matrices.getEdges().get(0).isDirected) tempGraph.addEdge(E[dijCount - 1], E[dijCount - 1].from, E[dijCount - 1].to,EdgeType.DIRECTED);
-                else tempGraph.addEdge(E[dijCount - 1], E[dijCount - 1].from, E[dijCount - 1].to);
+                //tempGraph.addVertex(V[dijCount]);
+                //System.out.println(tempGraph.getVertices());
+                if (matrices.getEdges().get(0).isDirected) tempGraph.addEdge(E.get(dijCount - 1), E.get(dijCount - 1).from, E.get(dijCount - 1).to,EdgeType.DIRECTED);
+                else tempGraph.addEdge(E.get(dijCount - 1), E.get(dijCount - 1).from, E.get(dijCount - 1).to);
                 dijCount++;
                 Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
                 VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
