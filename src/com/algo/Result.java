@@ -15,8 +15,13 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+
+
 
 public class Result extends JFrame {
     private JTabbedPane tabbedPane1;
@@ -95,12 +100,15 @@ public class Result extends JFrame {
         MaxFlow maxFlowObj = new MaxFlow(matrices);
         allPathesMaxFlow.setText("All Paths: "+maxFlowObj.allPaths);
         maxFlowValue.setText("Total Flow:  "+maxFlowObj.totalFlow);
+       int noPaths= maxFlowObj.myPaths.size();
         String[] V = new String[maxFlowObj.getMinGraph().getVertexCount()];
         Edge[] E = new Edge[maxFlowObj.getMinGraph().getEdgeCount()];
         maxFlowObj.getMinGraph().getVertices().toArray(V);
         maxFlowObj.getMinGraph().getEdges().toArray(E);
+        Arrays.sort(E,Comparator.comparing(s->s.flow));
         Graph<String, Edge> tempGraph = new SparseMultigraph<>();
         tempGraph.addVertex(V[0]);
+        tempGraph.addVertex(V[V.length-1]);
         Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
         VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
         vv3.getRenderContext().setVertexLabelTransformer(String::valueOf);
@@ -115,16 +123,29 @@ public class Result extends JFrame {
                 maxFlow.removeAll();
                 revalidate();
                 repaint();
-                if(maxFlowCount <V.length) {
-                    tempGraph.addVertex(V[maxFlowCount]);
-                    tempGraph.addEdge(E[maxFlowCount - 1], E[maxFlowCount - 1].from, E[maxFlowCount - 1].to, EdgeType.DIRECTED);
+                if(maxFlowCount<noPaths+1)
+                {
+                    for (int i=0 ; i< maxFlowObj.myPaths.size();i++) System.out.println(maxFlowObj.myPaths.get(i));
+                    String[] arrOfV=maxFlowObj.myPaths.get(maxFlowCount-1).substring(9).split("->");
+
+                    for (int i = arrOfV.length - 1; i > 0; i--) {
+                            tempGraph.addVertex(arrOfV[i]);
+                            if(tempGraph.findEdge(arrOfV[i],arrOfV[i-1])!=null) continue;
+                            Edge edge = new Edge(arrOfV[i],arrOfV[i-1],true,maxFlowObj.getMinGraph().findEdge(arrOfV[i],arrOfV[i-1]).flow);
+                            tempGraph.addEdge(edge, arrOfV[i], arrOfV[i-1], EdgeType.DIRECTED);
+
+                    }
 
                     maxFlowCount++;
-                     }
-                 else
-                {
-                    tempGraph.addEdge(E[maxFlowCount - 1], E[maxFlowCount - 1].from, E[maxFlowCount - 1].to, EdgeType.DIRECTED);
+                }
+                else {
+
+                    for (Edge edge : E) {
+                        if (edge.flow.charAt(0) == '0') tempGraph.addEdge(edge, edge.from, edge.to, EdgeType.DIRECTED);
+
+                    }
                     nextEdgeInMaxFlow.setEnabled(false);
+
                 }
                 Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
                 VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
@@ -147,12 +168,9 @@ public class Result extends JFrame {
         Dijkstra dijkstraObj = new Dijkstra(matrices);
         this.Dijkstra.setLayout(new BorderLayout());
         String[] V = new String[dijkstraObj.getMinGraph().getVertexCount()];
-        //Edge[] E = new Edge[dijkstraObj.getMinGraph().getEdgeCount()];
         dijkstraObj.getMinGraph().getVertices().toArray(V);
-        //dijkstraObj.getMinGraph().getEdges().toArray(E);
-        //Collections.sort(E);
         ArrayList<Edge> E = new ArrayList<>(dijkstraObj.getMinGraph().getEdges());
-        Collections.sort(E);
+        E.sort(Comparator.comparing(s -> s.totalCost));
         Graph<String, Edge> tempGraph = new SparseMultigraph<>();
         tempGraph.addVertex(V[0]);
         Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
@@ -169,8 +187,7 @@ public class Result extends JFrame {
                 Dijkstra.removeAll();
                 revalidate();
                 repaint();
-                //tempGraph.addVertex(V[dijCount]);
-                //System.out.println(tempGraph.getVertices());
+                tempGraph.addVertex(V[dijCount]);
                 if (matrices.getEdges().get(0).isDirected) tempGraph.addEdge(E.get(dijCount - 1), E.get(dijCount - 1).from, E.get(dijCount - 1).to,EdgeType.DIRECTED);
                 else tempGraph.addEdge(E.get(dijCount - 1), E.get(dijCount - 1).from, E.get(dijCount - 1).to);
                 dijCount++;

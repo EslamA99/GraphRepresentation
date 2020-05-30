@@ -15,6 +15,7 @@ public class MaxFlow {
     private ArrayList<String>vertices;
         private boolean directed=false;
         private Graph<String, Edge> minGraph = new SparseMultigraph<>();
+    ArrayList<String>myPaths=new ArrayList<>();
 
     ArrayList<Edge> edges;
 
@@ -24,7 +25,7 @@ public class MaxFlow {
         V=vertices.size();
         edges = matrices.getEdges();
         directed=edges.get(0).isDirected;
-        allPaths=" ";
+        allPaths="";
         Collections.sort(edges);
         int[][] graph = new int[vertices.size()][vertices.size()];
         int indexFrom;
@@ -80,6 +81,7 @@ public class MaxFlow {
             int[] parent = new int[V];
 
             int max_flow = 0;
+            int noSteps=1;
             while (bfs(rGraph, s, t, parent))
             {
                 int path_flow = Integer.MAX_VALUE;
@@ -87,20 +89,25 @@ public class MaxFlow {
                 {
                     u = parent[v];
                     path_flow = Math.min(path_flow, rGraph[u][v]);
-                   }
+                }
+                allPaths+="Path "+noSteps+" : "+t+"->";
+                String temp="Path "+noSteps+" : "+t+"->";
                 for (v=vertices.indexOf(t); v != vertices.indexOf(s); v=parent[v])
                 {
                     u = parent[v];
                     rGraph[u][v] -= path_flow;
                     rGraph[v][u] += path_flow;
-                    allPaths+=u+"->";
-                }
-                allPaths+=path_flow+"\n";
-                max_flow += path_flow;
+                    allPaths+=vertices.get(u)+"->";
+                    temp+=vertices.get(u)+"->";
 
+                }
+                myPaths.add(temp);
+                allPaths+= "max flow :"+path_flow+" , ";
+                max_flow += path_flow;
+                noSteps++;
             }
             for (int i=0;i<V;i++){
-                minGraph.addVertex(vertices.get(i));
+
                 for (int j=0;j<V;j++){
                     if(graph[i][j]!=0) {
                         Edge e=new Edge(vertices.get(i),vertices.get(j),directed,graph[i][j]-rGraph[i][j]+"/"+graph[i][j]);

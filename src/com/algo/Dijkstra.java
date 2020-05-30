@@ -33,17 +33,10 @@ public class Dijkstra {
             }
             System.out.println(edge.weight);
         }
-        for (int i=0;i<2;i++){
-            for (int j=0;j<2;j++){
-                System.out.print(graph[i][j]+"  ");
-            }
-            System.out.println();
-        }
         dijkstra(graph);
     }
     public Graph<String, Edge> getMinGraph() {
         return minGraph;
-
     }
 
 
@@ -81,7 +74,7 @@ public class Dijkstra {
                         minGraph.removeEdge(getIndex(v));
                         minGraph.removeVertex(getvertix(vertices.get(v)));
                     }
-                    Edge e=new Edge(vertices.get(u)+" / cost : "+dist[u],vertices.get(v)+" / cost : "+dist[v],directed,dist[v]);
+                    Edge e=new Edge(vertices.get(u)+" / cost : "+dist[u],vertices.get(v)+" / cost : "+dist[v],directed,graph[u][v],dist[v]);
                     if(directed)
                         minGraph.addEdge(e,vertices.get(u)+" / cost : "+dist[u],vertices.get(v)+" / cost : "+dist[v], EdgeType.DIRECTED);
 
