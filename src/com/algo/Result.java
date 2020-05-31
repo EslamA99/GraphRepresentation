@@ -72,7 +72,6 @@ public class Result extends JFrame {
         setSize(800, 600);
         add(panel1);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         setMatricesIntoTables();
         setGraph();
         setDijGraph();
@@ -82,16 +81,10 @@ public class Result extends JFrame {
         setGraphColoring();
         setHamiltonGraph();
         setMinHamiltonGraph();
-
-
     }
 
     private void setMaxFlowGraph() {
-
-
-
         this.maxFlow.setLayout(new BorderLayout());
-
         if (!matrices.getEdges().get(0).isDirected) {
             JLabel label2 = new JLabel("<html><h1>cannot be generate because it's undirected graph</h1></html>");
             this.maxFlow.add(label2);
@@ -133,19 +126,14 @@ public class Result extends JFrame {
                             if(tempGraph.findEdge(arrOfV[i],arrOfV[i-1])!=null) continue;
                             Edge edge = new Edge(arrOfV[i],arrOfV[i-1],true,maxFlowObj.getMinGraph().findEdge(arrOfV[i],arrOfV[i-1]).flow);
                             tempGraph.addEdge(edge, arrOfV[i], arrOfV[i-1], EdgeType.DIRECTED);
-
                     }
-
                     maxFlowCount++;
                 }
                 else {
-
                     for (Edge edge : E) {
                         if (edge.flow.charAt(0) == '0') tempGraph.addEdge(edge, edge.from, edge.to, EdgeType.DIRECTED);
-
                     }
                     nextEdgeInMaxFlow.setEnabled(false);
-
                 }
                 Layout<String, Edge> layout3 = new CircleLayout<>(tempGraph);
                 VisualizationViewer<String, Edge> vv3 = new VisualizationViewer<>(layout3);
@@ -155,13 +143,8 @@ public class Result extends JFrame {
                 vv3.setGraphMouse(graphMouse3);
                 graphMouse3.setMode(ModalGraphMouse.Mode.PICKING);
                 maxFlow.add(vv3, BorderLayout.NORTH);
-
             }
         });
-
-
-
-
     }
 
     private void setDijGraph() {
@@ -187,7 +170,7 @@ public class Result extends JFrame {
                 Dijkstra.removeAll();
                 revalidate();
                 repaint();
-                tempGraph.addVertex(V[dijCount]);
+                //tempGraph.addVertex(V[dijCount]);
                 if (matrices.getEdges().get(0).isDirected) tempGraph.addEdge(E.get(dijCount - 1), E.get(dijCount - 1).from, E.get(dijCount - 1).to,EdgeType.DIRECTED);
                 else tempGraph.addEdge(E.get(dijCount - 1), E.get(dijCount - 1).from, E.get(dijCount - 1).to);
                 dijCount++;
@@ -203,8 +186,6 @@ public class Result extends JFrame {
                     nextEdgeInDij.setEnabled(false);
             }
         });
-
-
     }
 
     private void setHamiltonGraph() {
@@ -317,8 +298,6 @@ public class Result extends JFrame {
         minGraphPannel.add(vv3, BorderLayout.NORTH);
     }
 
-
-
     private void setMatricesIntoTables() {
         matrices.setAdjTable(adjTableModel);
         matrices.setRepTable(repTableModel);
@@ -342,6 +321,5 @@ public class Result extends JFrame {
 
         graphPanel.setLayout(new BorderLayout());
         graphPanel.add(vv3, BorderLayout.NORTH);
-
     }
 }
