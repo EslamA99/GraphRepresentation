@@ -1,2 +1,33 @@
-# GraphRepresentation1
-[FCI_CU_CS316_General_Level3_PID23867592_20170010_20170011_20170019_20170047_20170140.pdf](https://github.com/eslam11993377/GraphRepresentation1/files/10108551/FCI_CU_CS316_General_Level3_PID23867592_20170010_20170011_20170019_20170047_20170140.pdf)
+
+•	Step4:
+
+Then I find min distance vertex from my visited vertices which is vertex e with distance = 9.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+•	Step5:
+
+Then I find min distance vertex from my visited vertices which is vertex 
